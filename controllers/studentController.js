@@ -13,7 +13,7 @@ module.exports.createStudent = async function (req, res) {
 		const student = await Student.findOne({ email });
 
 		if (student) {
-			console.log('Email already exists');
+			req.flash('error', 'User exist already');
 			return res.redirect('back');
 		}
 
@@ -29,7 +29,7 @@ module.exports.createStudent = async function (req, res) {
 			react,
 		});
 		await newStudent.save();
-
+		req.flash('success', 'Student Added successfully');
 		return res.redirect('/');
 	} catch (error) {
 		console.log(`Error in creating student: ${error}`);
@@ -61,6 +61,7 @@ module.exports.deleteStudent = async function (req, res) {
 			}
 		}
 		await Student.findByIdAndDelete(id);
+		req.flash('success', 'Student Deleted successfully');
 		res.redirect('back');
 	} catch (error) {
 		console.log('Error in deleting student');

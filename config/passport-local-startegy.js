@@ -3,7 +3,8 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('../models/userSchema');
 
-const local = new LocalStrategy({ usernameField: 'email' }, function (
+const local = new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, function (
+  req,
   email,
   password,
   done
@@ -15,7 +16,7 @@ const local = new LocalStrategy({ usernameField: 'email' }, function (
     }
 
     if (!user || !user.isPasswordCorrect(password)) {
-      console.log('Invalid Username/Password');
+      req.flash('error', 'Invalid Email or Password');
       return done(null, false);
     }
     return done(null, user);

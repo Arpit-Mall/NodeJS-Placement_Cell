@@ -72,7 +72,7 @@ module.exports.scheduleInterview = async function (req, res) {
       student.interviews.push(interview);
       student.save();
     }
-    console.log('Interview Scheduled Successfully');
+    req.flash('success', 'Interview Scheduled Successfully');
     return res.redirect('/company/home');
   } catch (error) {
     console.log(`Error in scheduling Interview: ${error}`);
@@ -106,7 +106,7 @@ module.exports.updateStatus = async function (req, res) {
         }
       }
     }
-    console.log('Interview Status Changed Successfully');
+    req.flash('success', 'Interview Status Changed Successfully');
     return res.redirect('back');
   } catch (error) {
     console.log(`Error in updating status: ${error}`);

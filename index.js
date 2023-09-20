@@ -6,6 +6,9 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-startegy');
 const port = process.env.PORT || 8000;
+const flash = require('connect-flash');
+const customMiddleware = require('./config/middleware')
+
 
 connectToMongo();
 
@@ -40,6 +43,8 @@ app.use(express.static('./assets'));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
+app.use(flash());
+app.use(customMiddleware.setflash);
 
 // express router
 app.use('/', require('./routes'));

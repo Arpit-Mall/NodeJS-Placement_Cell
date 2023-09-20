@@ -21,7 +21,7 @@ module.exports.signin = function (req, res) {
 
 // create session
 module.exports.createSession = function (req, res) {
-	console.log('Session created successfully');
+	req.flash('success', 'Logged-In successfully');
 	return res.redirect('/');
 };
 
@@ -32,6 +32,8 @@ module.exports.signout = function (req, res) {
 			return next(err);
 		}
 	});
+	req.flash('success', 'You have logged out');
+	console.log("logout successfully")
 	return res.redirect('/users/signin');
 };
 
@@ -40,13 +42,13 @@ module.exports.createUser = async function (req, res) {
 	const { name, email, password, confirmPassword } = req.body;
 	try {
 		if (password !== confirmPassword) {
-			console.log(`Passwords dont match`);
+			req.flash('error', 'Password and Confirm Password does not match');
 			return res.redirect('back');
 		}
 		const user = await User.findOne({ email });
 
 		if (user) {
-			console.log(`Email already exists`);
+			req.flash('error', 'User exist already');
 			return res.redirect('back');
 		}
 
@@ -59,12 +61,16 @@ module.exports.createUser = async function (req, res) {
 		await newUser.save();
 
 		if (!newUser) {
+			req.flash('error', 'Error in creating user');
 			console.log(`Error in creating user`);
 			return res.redirect('back');
 		}
 
+		req.flash('success', 'User sign-up Successfully');
 		return res.redirect('/users/signin');
+
 	} catch (error) {
+		// req.flash('error', `Error in creating user: ${error}`);
 		console.log(`Error in creating user: ${error}`);
 		res.redirect('back');
 	}
@@ -115,10 +121,12 @@ module.exports.downloadCsv = async function (req, res) {
 				console.log(error);
 				return res.redirect('back');
 			}
-			console.log('Report generated successfully');
+			// req.flash('success', 'Report generated successfully');
+			// console.log('Report generated successfully');
 			return res.download('report/data.csv');
 		});
 	} catch (error) {
+		// req.flash('error', `Error in downloading file: ${error}`);
 		console.log(`Error in downloading file: ${error}`);
 		return res.redirect('back');
 	}
