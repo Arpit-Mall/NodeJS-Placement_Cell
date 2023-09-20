@@ -5,7 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-startegy');
-const port = process.env.PORT || 8000;
+const port = 7000;
 const flash = require('connect-flash');
 const customMiddleware = require('./config/middleware')
 
